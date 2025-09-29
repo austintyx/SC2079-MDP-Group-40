@@ -1,4 +1,4 @@
-# SC2079 MDP Group 11 - Algorithms
+# SC2079 MDP Group 40 - Algorithms
 
 **Table of Contents**
 
