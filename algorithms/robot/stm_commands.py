@@ -115,7 +115,7 @@ def convert_segments_to_commands(
         if segment.v == 1:
             if segment.s == -1:
                 result.append([
-                    "L,0",
+                    "L",
                     AlgoOutputLivePosition(
                         x = segment.pos.x // GRID_CELL_CM,
                         y = segment.pos.y // GRID_CELL_CM,
@@ -143,7 +143,7 @@ def convert_segments_to_commands(
         elif segment.v == -1:
             if segment.s == -1:
                 result.append([
-                    "BL,0",
+                    "BL",
                     AlgoOutputLivePosition(
                         x = segment.pos.x // GRID_CELL_CM,
                         y = segment.pos.y // GRID_CELL_CM,
@@ -161,7 +161,7 @@ def convert_segments_to_commands(
                 ])
             elif segment.s == 1:
                 result.append([
-                    "BR,0",
+                    "BR",
                     AlgoOutputLivePosition(
                         x = segment.pos.x // GRID_CELL_CM,
                         y = segment.pos.y // GRID_CELL_CM,
@@ -177,7 +177,7 @@ def convert_segments_to_commands(
         if i == 0:
             resultCombined.append(result[i])
             n = 0
-        elif string[0] == "L" and string[0] == "R" and string[0] == "BL" and string[0] == "BR":
+        elif string[0] == "L" or string[0] == "R" or string[0] == "BL" or string[0] == "BR":
             resultCombined.append(result[i])
             n += 1
         else:
@@ -216,11 +216,11 @@ def convert_segments_to_commands(
         split_result = result.split(",")
 
         # Skip if command is a turn command
-        if split_result[0] != "center":
+        if split_result[0] == "L" or split_result[0] == "R" or split_result[0] == "BL" or split_result[0] == "BR":
             continue
 
-        direction, distance = split_result[2], int(split_result[3])
-        split_result[3] = str(_get_translated_straight_distance(direction, distance))
+        direction, distance = split_result[0], int(split_result[1])
+        split_result[1] = str(_get_translated_straight_distance(direction, distance))
         resultCombined[i][0] = ",".join(split_result)
     
     return resultCombined
@@ -247,7 +247,7 @@ def convertThetatoNumericDirection(theta):
             3: East
             4: West
     '''
-    if theta >= 2* math.pi or theta <= -2*math.pi:
+    if theta >= math.pi or theta <= -math.pi:
         theta = theta - (2*math.pi)
     else:
         theta = theta

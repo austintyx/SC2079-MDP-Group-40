@@ -126,6 +126,7 @@ def main(algo_input: AlgoInput):
                 "y": node.pos.y,
                 "theta": node.pos.theta
             })
+            print("Node:", node)
         # Position configuration to represent scanning (*only for simulator)
         simulator_algo_output.append({"x": -1, "y": -1, "theta": -2})
         simulator_algo_output.append({"x": -1, "y": -1, "theta": -1})
@@ -144,7 +145,7 @@ def main(algo_input: AlgoInput):
             #end_position='test'
             end_position=command[1]
           ))
-        print(algoOutputLiveCommands)
+        #print(algoOutputLiveCommands)
     return simulator_algo_output
   
   
