@@ -115,7 +115,7 @@ def convert_segments_to_commands(
         if segment.v == 1:
             if segment.s == -1:
                 result.append([
-                    "left,77,F,0",
+                    "L,0",
                     AlgoOutputLivePosition(
                         x = segment.pos.x // GRID_CELL_CM,
                         y = segment.pos.y // GRID_CELL_CM,
@@ -124,7 +124,7 @@ def convert_segments_to_commands(
                 ])
             elif segment.s == 0:
                 result.append([
-                    "center,0,F," + str(int(segment.d)),
+                    "F," + str(int(segment.d)),
                     AlgoOutputLivePosition(
                         x = segment.pos.x // GRID_CELL_CM,
                         y = segment.pos.y // GRID_CELL_CM,
@@ -133,7 +133,7 @@ def convert_segments_to_commands(
                 ])
             elif segment.s == 1:
                 result.append([
-                    "right,102,F,0",
+                    "R",
                     AlgoOutputLivePosition(
                         x = segment.pos.x // GRID_CELL_CM,
                         y = segment.pos.y // GRID_CELL_CM,
@@ -143,7 +143,7 @@ def convert_segments_to_commands(
         elif segment.v == -1:
             if segment.s == -1:
                 result.append([
-                    "left,111,B,0",
+                    "BL,0",
                     AlgoOutputLivePosition(
                         x = segment.pos.x // GRID_CELL_CM,
                         y = segment.pos.y // GRID_CELL_CM,
@@ -152,7 +152,7 @@ def convert_segments_to_commands(
                 ])
             elif segment.s == 0:
                 result.append([
-                    "center,0,B," + str(int(segment.d)),
+                    "B," + str(int(segment.d)),
                     AlgoOutputLivePosition(
                         x = segment.pos.x // GRID_CELL_CM,
                         y = segment.pos.y // GRID_CELL_CM,
@@ -161,7 +161,7 @@ def convert_segments_to_commands(
                 ])
             elif segment.s == 1:
                 result.append([
-                    "right,71,B,0",
+                    "BR,0",
                     AlgoOutputLivePosition(
                         x = segment.pos.x // GRID_CELL_CM,
                         y = segment.pos.y // GRID_CELL_CM,
@@ -177,13 +177,13 @@ def convert_segments_to_commands(
         if i == 0:
             resultCombined.append(result[i])
             n = 0
-        elif string[0] != "center":
+        elif string[0] == "L" and string[0] == "R" and string[0] == "BL" and string[0] == "BR":
             resultCombined.append(result[i])
             n += 1
         else:
             prevstr = resultCombined[n][0].split(',')
-            if string[0] == prevstr[0] and string[2] == prevstr[2]:
-                new = string[0]+','+string[1]+','+string[2]+','+str(int(string[3])+int(prevstr[3]))
+            if string[0] == prevstr[0]:
+                new = string[0]+','+str(int(string[1])+int(prevstr[1]))
                 resultCombined[n] = [new, result[i][1]]
             else:
                 resultCombined.append(result[i])
@@ -247,19 +247,23 @@ def convertThetatoNumericDirection(theta):
             3: East
             4: West
     '''
+    if theta >= 2* math.pi or theta <= -2*math.pi:
+        theta = theta - (2*math.pi)
+    else:
+        theta = theta
     # East
     if -math.pi / 4 <= theta and theta < math.pi / 4:
-        return 3
+        return 'E' #3
     # North
     elif math.pi / 4 <= theta and theta <= 3 * math.pi / 4:
-        return 1
+        return 'N' #1
     # West
     elif (3 * math.pi / 4 < theta and theta <= math.pi) or (-math.pi <= theta and theta < -3 * math.pi / 4):
-        return 4
+        return 'W' #4
     # South
     elif (-3 * math.pi / 4 <= theta and theta <= -math.pi / 4):
-        return 2
+        return 'S' #2
     
     # Default: North
-    return 1
+    return theta
 

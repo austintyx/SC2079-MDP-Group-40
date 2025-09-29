@@ -62,7 +62,7 @@ class AlgoOutputSimulator(BaseModel):
 class AlgoOutputLivePosition(BaseModel):
   x: int # in cm
   y: int # in cm
-  d: int # Robot Face -> 1: North; 2: South; 3: East; 4: West
+  d: str # Robot Face -> 1: North; 2: South; 3: East; 4: West
 
 
 class AlgoOutputLiveCommand(BaseModel):
