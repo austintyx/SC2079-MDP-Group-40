@@ -66,7 +66,7 @@ class AlgoOutputLivePosition(BaseModel):
 
 
 class AlgoOutputLiveCommand(BaseModel):
-  cat: str = "control"
+  #cat: str = "control"
   value: str
   end_position: AlgoOutputLivePosition
 
@@ -103,6 +103,9 @@ def main(algo_input: AlgoInput):
 
   # Map
   map = Map(obstacles=obstacles)
+  #print("Map:", type(map))
+  #print("Initial:", initial_position)
+  #print("Start:", start_position)
 
   # Algorithm
   algo_type = algo_input["algo_type"]
@@ -126,17 +129,27 @@ def main(algo_input: AlgoInput):
         # Position configuration to represent scanning (*only for simulator)
         simulator_algo_output.append({"x": -1, "y": -1, "theta": -2})
         simulator_algo_output.append({"x": -1, "y": -1, "theta": -1})
-        #current_perm = 1
-        #stm_commands = []
-        #commands = convert_segments_to_commands(path)
-        #tm_commands.extend(commands)
-        #print(stm_commands)
-        print(algo_server_mode)
+        # TEST
+        current_perm = 1
+        stm_commands = []
+        commands = convert_segments_to_commands(path)
+        stm_commands.extend(commands)
+        stm_commands.append([f"SNAP{min_perm[current_perm]}", commands[-1][1]])
+        algoOutputLiveCommands: list[AlgoOutputLiveCommand] = [] # Array of commands
+        for command in stm_commands:
+          algoOutputLiveCommands.append(AlgoOutputLiveCommand(
+            cat="control",
+            value=command[0],
+            #value='test',
+            #end_position='test'
+            end_position=command[1]
+          ))
+        print(algoOutputLiveCommands)
     return simulator_algo_output
   
   
-  if algo_server_mode == AlgoInputMode.SIMULATOR:
-    print("TEST")
+  if algo_server_mode == AlgoInputMode.LIVE:
+    #print("TEST")
     current_perm = 1
     stm_commands = []
 
@@ -163,7 +176,7 @@ def main(algo_input: AlgoInput):
       value="FIN",
       end_position=algoOutputLiveCommands[-1].end_position
     ))
-
+    
     print("Commands:", algoOutputLiveCommands)
 
     return algoOutputLiveCommands
@@ -292,6 +305,10 @@ async def algo_live_test():
 @app.post("/algo/live", response_model=AlgoOutputLive, tags=["Algorithm"])
 async def algo_live(algo_input: AlgoInput):
   """Main endpoint for live mode"""
-  commands = main(algo_input.model_dump())
+  if hasattr(algo_input, "model_dump"):
+     algo_input = algo_input.model_dump()
+  else:
+     algo_input = algo_input.dict()
+  commands = main(algo_input)
 
   return { "commands": commands }

@@ -115,7 +115,7 @@ def convert_segments_to_commands(
         if segment.v == 1:
             if segment.s == -1:
                 result.append([
-                    "left,77,forward,0",
+                    "left,77,F,0",
                     AlgoOutputLivePosition(
                         x = segment.pos.x // GRID_CELL_CM,
                         y = segment.pos.y // GRID_CELL_CM,
@@ -124,7 +124,7 @@ def convert_segments_to_commands(
                 ])
             elif segment.s == 0:
                 result.append([
-                    "center,0,forward," + str(int(segment.d)),
+                    "center,0,F," + str(int(segment.d)),
                     AlgoOutputLivePosition(
                         x = segment.pos.x // GRID_CELL_CM,
                         y = segment.pos.y // GRID_CELL_CM,
@@ -133,7 +133,7 @@ def convert_segments_to_commands(
                 ])
             elif segment.s == 1:
                 result.append([
-                    "right,102,forward,0",
+                    "right,102,F,0",
                     AlgoOutputLivePosition(
                         x = segment.pos.x // GRID_CELL_CM,
                         y = segment.pos.y // GRID_CELL_CM,
@@ -143,7 +143,7 @@ def convert_segments_to_commands(
         elif segment.v == -1:
             if segment.s == -1:
                 result.append([
-                    "left,111,reverse,0",
+                    "left,111,B,0",
                     AlgoOutputLivePosition(
                         x = segment.pos.x // GRID_CELL_CM,
                         y = segment.pos.y // GRID_CELL_CM,
@@ -152,7 +152,7 @@ def convert_segments_to_commands(
                 ])
             elif segment.s == 0:
                 result.append([
-                    "center,0,reverse," + str(int(segment.d)),
+                    "center,0,B," + str(int(segment.d)),
                     AlgoOutputLivePosition(
                         x = segment.pos.x // GRID_CELL_CM,
                         y = segment.pos.y // GRID_CELL_CM,
@@ -161,7 +161,7 @@ def convert_segments_to_commands(
                 ])
             elif segment.s == 1:
                 result.append([
-                    "right,71,reverse,0",
+                    "right,71,B,0",
                     AlgoOutputLivePosition(
                         x = segment.pos.x // GRID_CELL_CM,
                         y = segment.pos.y // GRID_CELL_CM,
@@ -202,9 +202,9 @@ def convert_segments_to_commands(
         if distance == 0:
             return 0
         
-        if direction == "forward":
+        if direction == "F":
             return distance-1
-        elif direction == "reverse":
+        elif direction == "B":
             if distance < 50:
                 return distance
             else:

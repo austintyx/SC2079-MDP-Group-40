@@ -1,4 +1,5 @@
-const serverDomainUrl = "http://10.91.175.30:8000";
+// const serverDomainUrl = "http://10.91.175.30:8000";
+const serverDomainUrl = "http://127.0.0.1:8000";
 
 // Helper functions
 const handleResponse = async (response: Response) => {

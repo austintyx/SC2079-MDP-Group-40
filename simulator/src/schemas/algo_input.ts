@@ -1,6 +1,7 @@
 import { Obstacle } from "./obstacle";
 import { Position } from "./robot";
 
+
 export enum AlgoType {
   EXHAUSTIVE_ASTAR = "Exhaustive Astar",
   EUCLIDEAN = "Euclidean",

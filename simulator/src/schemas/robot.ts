@@ -2,8 +2,39 @@
 export interface Position {
   x: number;
   y: number;
-  theta: number; // in Radian; 0 = West; 1.37 = North; -1.37 = South;
+  theta: number; // in Radian;
 }
+
+export function thetaToRobotDirection(theta: number): RobotDirection {
+  // Normalize theta to range -Math.PI to Math.PI
+  const normalizedTheta = ((theta + Math.PI) % (2 * Math.PI)) - Math.PI;
+
+  if (normalizedTheta >= -0.7 && normalizedTheta <= 0.7) {
+    return RobotDirection.W;
+  } else if (normalizedTheta > 0.7 && normalizedTheta <= 2.0) {
+    return RobotDirection.N;
+  } else if (normalizedTheta >= -2.0 && normalizedTheta < -0.7) {
+    return RobotDirection.S;
+  } else {
+    return RobotDirection.E;
+  }
+}
+
+const directionToTheta: Record<'N' | 'S' | 'E' | 'W', number> = {
+  N: 1.57,
+  S: -1.57,
+  E: 0,
+  W: 3.14,
+};
+
+// Only accepts 'N', 'S', 'E', or 'W' as input
+export function convertDirectionToTheta(direction: 'N' | 'S' | 'E' | 'W'): number {
+  return directionToTheta[direction];
+}
+
+
+
+
 
 /** Simplified direction (instead of theta) that the Robot is facing. */
 export enum RobotDirection {
